@@ -57,13 +57,21 @@ batch-redis del prefix*`,
 		fmt.Printf("Del pattern: %s\n", args[0])
 		iter := client.Scan(0, args[0], int64(c.Int(_count))).Iterator()
 		count := 0
+		keys := make([]string, 100)
 		for iter.Next() {
-			v := iter.Val()
-			err := client.Del(v).Err()
-			if err == nil {
-				fmt.Printf("del %s\n", v)
-				count++
-			} else {
+			key := iter.Val()
+			if len(keys) > 99 {
+				if err := client.Del(keys...).Err(); err != nil {
+					panic(err)
+				}
+				keys = append([]string{})
+				fmt.Printf("%d: del %s\n", count, key)
+			}
+			count++
+			keys = append(keys, key)
+		}
+		if len(keys) > 0 {
+			if err := client.Del(keys...).Err(); err != nil {
 				panic(err)
 			}
 		}
