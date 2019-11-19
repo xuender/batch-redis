@@ -30,12 +30,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var countCmd = &cobra.Command{
-	Use:   "count",
-	Short: "Count key by pattern.",
-	Long: `Count key by pattern. For example:
+var delCmd = &cobra.Command{
+	Use:   "del",
+	Short: "Delete key by pattern.",
+	Long: `Delete key by pattern. For example:
 
-batch-redis count prefix*`,
+batch-redis del prefix*`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			panic(errors.New("Defect a SCAN pattern"))
@@ -54,19 +54,26 @@ batch-redis count prefix*`,
 		} else {
 			panic(err)
 		}
-		fmt.Printf("Count pattern: %s...\n", args[0])
-		count := 0
+		fmt.Printf("Del pattern: %s\n", args[0])
 		iter := client.Scan(0, args[0], int64(c.Int(_count))).Iterator()
+		count := 0
 		for iter.Next() {
-			count++
+			v := iter.Val()
+			err := client.Del(v).Err()
+			if err == nil {
+				fmt.Printf("del %s\n", v)
+				count++
+			} else {
+				panic(err)
+			}
 		}
 		if err := iter.Err(); err != nil {
 			panic(err)
 		}
-		fmt.Printf("Count %s matching %d.\n", args[0], count)
+		fmt.Printf("Del %s matching %d\n", args[0], count)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(countCmd)
+	rootCmd.AddCommand(delCmd)
 }

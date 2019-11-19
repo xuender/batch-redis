@@ -37,23 +37,17 @@ const (
 	_password = "redis.password"
 	_db       = "redis.db"
 	_timeout  = "redis.timeout"
+	_count    = "redis.count"
 )
 
 var _cfgFile string
 
-// rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "batch-redis",
 	Short: "redis batch operation",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Long: `redis count or redis delete. For example:
+batch-redis count prefix*
+batch-redis del prefix*`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -75,6 +69,7 @@ func init() {
 	pflags.StringP(_password, "a", "", "Password to use when connecting to the server")
 	pflags.Int32P(_db, "n", 0, "Database number")
 	pflags.Int32P(_timeout, "t", 10, "Timeout for socket reads")
+	pflags.Int32P(_count, "u", 1000, "SCAN count")
 }
 
 // initConfig reads in config file and ENV variables if set.

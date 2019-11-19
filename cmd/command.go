@@ -7,20 +7,19 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Command 命令行
+// Command line.
 type Command struct {
 	cmd *cobra.Command
 }
 
-// NewCommand 新疆命令行参数
+// NewCommand create Commond.
 func NewCommand(cmd *cobra.Command) *Command {
 	return &Command{cmd: cmd}
 }
 
-// Int 读取配置Int
+// Int read Int.
 func (c *Command) Int(name string) int {
 	f := c.cmd.Flag(name)
-	// 命令行优先
 	if f.Changed {
 		if i, err := strconv.Atoi(f.Value.String()); err == nil {
 			return i
@@ -35,10 +34,9 @@ func (c *Command) Int(name string) int {
 	return ret
 }
 
-// String 读取配置String
+// String read String.
 func (c *Command) String(name string) string {
 	f := c.cmd.Flag(name)
-	// 命令行优先
 	if f.Changed {
 		return f.Value.String()
 	}
@@ -49,11 +47,10 @@ func (c *Command) String(name string) string {
 	return ret
 }
 
-// Bool 读取配置String
+// Bool read Bool.
 func (c *Command) Bool(name string) bool {
 	f := c.cmd.Flag(name)
 	b, _ := strconv.ParseBool(f.Value.String())
-	// 命令行优先
 	if f.Changed {
 		return b
 	}

@@ -39,6 +39,8 @@ replace google.golang.org/appengine => github.com/golang/appengine v1.6.1
 require (
 	github.com/go-redis/redis/v7 v7.0.0-beta.4
 	github.com/golang/protobuf v1.3.2 // indirect
+	github.com/iris-contrib/go.uuid v2.0.0+incompatible // indirect
+	github.com/kataras/iris v11.1.1+incompatible
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/onsi/ginkgo v1.10.3 // indirect
 	github.com/onsi/gomega v1.7.1 // indirect
